@@ -1,0 +1,83 @@
+{
+  "type": "object",
+  "properties": {
+    "inference_engine_name": {
+      "type": "string"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "nms_threshold": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "image": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        },
+        "scale": {
+          "type": "number"
+        },
+        "crop": {
+          "type": "boolean"
+        },
+        "swapRB": {
+          "type": "boolean"
+        },
+        "mean": {
+          "type": "object",
+          "properties": {
+            "R": {
+              "type": "number"
+            },
+            "G": {
+              "type": "number"
+            },
+            "B": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "R",
+            "G",
+            "B"
+          ]
+        }
+      },
+      "required": [
+        "width",
+        "height",
+        "scale",
+        "crop",
+        "swapRB",
+        "mean"
+      ]
+    },
+    "framework": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "network": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "inference_engine_name",
+    "confidence",
+    "nms_threshold",
+    "image",
+    "framework",
+    "type",
+    "network"
+  ]
+}
