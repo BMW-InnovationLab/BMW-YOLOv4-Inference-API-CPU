@@ -1,9 +1,9 @@
+# Define meta class
 __metaclass__ = type
 
 
 class ApplicationError(Exception):
     """Base class for other exceptions"""
-
     def __init__(self, default_message, additional_message=''):
         self.default_message = default_message
         self.additional_message = additional_message
@@ -18,7 +18,6 @@ class ApplicationError(Exception):
 
 class InvalidModelConfiguration(ApplicationError):
     """Raised when the model's configuration is corrupted"""
-
     def __init__(self, additional_message=''):
         # super('Invalid model configuration', additional_message)
         super().__init__('Invalid model configuration', additional_message)
@@ -26,7 +25,6 @@ class InvalidModelConfiguration(ApplicationError):
 
 class ModelNotFound(ApplicationError):
     """Raised when the model is not found"""
-
     def __init__(self, additional_message=''):
         # super('Model not found', additional_message)
         super().__init__('Model not found', additional_message)
@@ -34,7 +32,6 @@ class ModelNotFound(ApplicationError):
 
 class ModelNotLoaded(ApplicationError):
     """Raised when the model is not loaded"""
-
     def __init__(self, additional_message=''):
         # super('Error loading model', additional_message)
         super().__init__('Error loading model', additional_message)
@@ -42,7 +39,6 @@ class ModelNotLoaded(ApplicationError):
 
 class InvalidInputData(ApplicationError):
     """Raised when the input data is corrupted"""
-
     def __init__(self, additional_message=''):
         # super('Invalid input data', additional_message)
         super().__init__('Invalid input data', additional_message)
@@ -50,7 +46,6 @@ class InvalidInputData(ApplicationError):
 
 class InferenceEngineNotFound(ApplicationError):
     """Raised when the Inference Engine is not found"""
-
     def __init__(self, additional_message=''):
         # super('Inference engine not found', additional_message)
         super().__init__('Inference engine not found', additional_message)

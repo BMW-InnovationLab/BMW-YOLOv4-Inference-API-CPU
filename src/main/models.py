@@ -1,5 +1,5 @@
+# API response class
 class ApiResponse:
-
     def __init__(self, success=True, data=None, error=None):
         """
         Defines the response shape

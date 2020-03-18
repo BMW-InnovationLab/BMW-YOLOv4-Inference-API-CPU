@@ -1,11 +1,11 @@
+# Import dependencies
 import os
 import logging
 from datetime import datetime, date
 from inference.base_error import AbstractError
 
-
+# Abstract error class
 class Error(AbstractError):
-
     def __init__(self):
         if 'logs' not in os.listdir():
             os.mkdir('logs')

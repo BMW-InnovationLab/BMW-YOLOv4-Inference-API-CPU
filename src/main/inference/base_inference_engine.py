@@ -1,9 +1,9 @@
+# Import dependencies
 from abc import ABC, abstractmethod
 from inference.exceptions import InvalidModelConfiguration, ModelNotLoaded, ApplicationError
 
-
+# Abstract inference engine class
 class AbstractInferenceEngine(ABC):
-
     def __init__(self, model_path):
         """
         Takes a model path and calls the load function.

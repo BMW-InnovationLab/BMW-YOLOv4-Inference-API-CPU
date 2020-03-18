@@ -1,3 +1,4 @@
+# Import dependencies
 import os
 import cv2
 import uuid
@@ -9,9 +10,8 @@ from PIL import Image, ImageDraw, ImageFont
 from inference.base_inference_engine import AbstractInferenceEngine
 from inference.exceptions import InvalidModelConfiguration, InvalidInputData, ApplicationError
 
-
+# Inference engine class
 class InferenceEngine(AbstractInferenceEngine):
-
     def __init__(self, model_path):
         self.net = None
         self.scale = None

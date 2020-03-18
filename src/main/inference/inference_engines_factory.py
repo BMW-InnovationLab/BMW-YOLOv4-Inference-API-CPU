@@ -1,10 +1,10 @@
+# Import dependencies
 import os
 import json
 from inference.exceptions import ModelNotFound, ApplicationError, InvalidModelConfiguration, InferenceEngineNotFound, ModelNotLoaded
 
-
+# Inference engine factory class
 class InferenceEngineFactory:
-
     @staticmethod
     def get_engine(path_to_model):
         """
