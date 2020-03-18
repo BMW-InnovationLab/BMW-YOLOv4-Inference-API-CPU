@@ -1,10 +1,10 @@
+# Import dependencies
 import logging
 from datetime import datetime
 from abc import ABC, abstractmethod
 
-
+# Abstract error class
 class AbstractError(ABC):
-
     def __init__(self):
         """
         Sets the logger file, level, and format.

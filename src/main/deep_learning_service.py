@@ -1,3 +1,4 @@
+# Import dependencies
 import os
 import json
 import uuid
@@ -6,9 +7,8 @@ from inference.inference_engines_factory import InferenceEngineFactory
 from inference.exceptions import ModelNotFound, InvalidModelConfiguration, ModelNotLoaded, InferenceEngineNotFound, \
     InvalidInputData, ApplicationError
 
-
+# Deep learning service class
 class DeepLearningService:
-
     def __init__(self):
         """
         Sets the models base directory, and initializes some dictionaries.
