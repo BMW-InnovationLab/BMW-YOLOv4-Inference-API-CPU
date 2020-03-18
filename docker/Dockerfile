@@ -1,5 +1,5 @@
 # Use Python 3 base image
-FROM python:3.6
+FROM python:3
 
 # Add maintainer information
 LABEL maintainer="antoine.charbel@inmind.ai"

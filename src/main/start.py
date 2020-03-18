@@ -18,7 +18,7 @@ sys.path.append('./inference')
 dl_service = DeepLearningService()
 error_logging = Error()
 app = FastAPI(version='3.1.0', title='BMW InnovationLab YOLOv3 OpenCV Inference Automation',
-			  description="<b>API for performing YOLOv3 opencv inference</b></br></br>"
+			  description="<b>API for YOLOv3 OpenCV Inference</b></br></br>"
 						  "<b>Contact the developers:</b></br>"
 						  "<b>Antoine Charbel: <a href='mailto:antoine.charbel@inmind.ai'>antoine.charbel@inmind.ai</a></b></br>"
 						  "<b>BMW Innovation Lab: <a href='mailto:innovation-lab@bmw.de'>innovation-lab@bmw.de</a></b>")
