@@ -55,7 +55,7 @@ sudo docker build --build-arg http_proxy='' --build-arg https_proxy='' -t yolov3
 
 ## Run The Docker Container
 
-To run the API, go to the project's root directory and run the following:
+To run the API, go the to the API's directory and run the following:
 
 #### Using Linux based docker:
 
@@ -79,7 +79,7 @@ To see all available endpoints, open your favorite browser and navigate to:
 ```
 http://<machine_IP>:<docker_host_port>/docs
 ```
-The 'predict_batch' endpoint is not shown on swagger.
+The 'predict_batch' endpoint is not shown on swagger. The list of files input is not yet supported.
 
 **P.S: If you are using custom endpoints like /load, /detect, and /get_labels, you should always use the /load endpoint first and then use /detect or /get_labels**
 
@@ -133,24 +133,26 @@ Returns the specified model's configuration
 
 Performs inference on specified model and a list of images, and returns bounding boxes
 
+**P.S: Custom endpoints like /load, /detect, and /get_labels should be used in a chronological order. First you have to call /load, and then call /detect or /get_labels**
+
 ## Model structure
 
 The folder "models" contains subfolders of all the models to be loaded.
 Inside each subfolder there should be a:
 
-- Cfg file (ends with .cfg): contains the configuration of the model
+- Cfg file (yolo-obj.cfg): contains the configuration of the model
 
-- Weights file (ends with .weights)
+- Weights file (yolo-obj.weights)
 
-- Names file  (ends with .names) : contains the names of the classes
+- Names file  (obj.names) : contains the names of the classes
 
 - Config.json (This is a json file containing information about the model)
 
   ```json
     {
       "inference_engine_name": "yolov3_opencv_cpu_detection",
-      "confidence": 60,
-      "nms_threshold": 0.6,
+      "confidence": <between_0_and_100>,
+      "nms_threshold": <between_0_and_1>,
       "image": {
         "width": 416,
         "height": 416,
@@ -169,8 +171,6 @@ Inside each subfolder there should be a:
     }
   ```
   P.S
-  - confidence value should be between 0 and 100
-  - nms_threshold value should be between 0 and 1
   - You can change confidence and nms_threshold values while running the API
   - The API will return bounding boxes with a confidence higher than the "confidence" value. A high "confidence" can show you only accurate predictions
 
@@ -205,12 +205,4 @@ Inside each subfolder there should be a:
 </table>
 
 ## Acknowledgment
-
-[inmind.ai](https://inmind.ai)
-
-[robotron.de](https://robotron.de)
-
-Antoine Charbel, inmind.ai , Beirut, Lebanon
-
-Daniel Anani, inmind.ai, Beirut, Lebanon
 
