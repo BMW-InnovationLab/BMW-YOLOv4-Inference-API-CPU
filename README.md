@@ -151,8 +151,8 @@ Inside each subfolder there should be a:
   ```json
     {
       "inference_engine_name": "yolov3_opencv_cpu_detection",
-      "confidence": <between_0_and_100>,
-      "nms_threshold": <between_0_and_1>,
+      "confidence": 60,
+      "nms_threshold": 0.6,
       "image": {
         "width": 416,
         "height": 416,
