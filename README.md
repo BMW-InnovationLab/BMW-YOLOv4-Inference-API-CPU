@@ -206,3 +206,10 @@ Inside each subfolder there should be a:
 
 ## Acknowledgment
 
+[inmind.ai](https://inmind.ai)
+
+[robotron.de](https://robotron.de)
+
+Antoine Charbel, inmind.ai , Beirut, Lebanon
+
+Daniel Anani, inmind.ai, Beirut, Lebanon
