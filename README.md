@@ -6,7 +6,41 @@ The inference REST API works on CPU and doesn't require any GPU usage. It's supp
 
 Models trained using our training Yolov3 repository can be deployed in this API. Several object detection models can be loaded and used at the same time.
 
+This repo can be deployed using either **docker** or **docker swarm**.
+
+Please use **docker swarm** only if you need to:
+
+* Provide redundancy in terms of API containers: In case a container went down, the incoming requests will be redirected to another running instance.
+
+* Coordinate between the containers: Swarm will orchestrate between the APIs and choose one of them to listen to the incoming request.
+
+* Scale up the Inference service in order to get a faster prediction especially if there's traffic on the service.
+
+If none of the aforementioned requirements are needed, simply use **docker**.
+
 ![predict image](./docs/4.gif)
+
+## Contents
+
+```sh
+YOLO v3 CPU Inference API for Windows and Linux/
+├── Prerequisites
+│   ├── Check for prerequisites
+│   └── Install prerequisites
+├── Build The Docker Image
+├── Run the docker container
+│   ├── Docker
+│   └── Docker swarm
+│       ├── Docker swarm setup
+│       ├── With one host
+│       ├── With multiple hosts
+│       └── Useful Commands
+├── API Endpoints
+├── Model structure
+└── Benchmarking
+    ├── Docker
+    └── Docker swarm
+```
 
 ## Prerequisites
 
@@ -55,6 +89,8 @@ sudo docker build --build-arg http_proxy='' --build-arg https_proxy='' -t yolov3
 
 ## Run The Docker Container
 
+### Docker
+
 To run the API, go the to the API's directory and run the following:
 
 #### Using Linux based docker:
@@ -71,6 +107,104 @@ docker run -itv ${PWD}/models:/models -p <docker_host_port>:7770 yolov3_inferenc
 The <docker_host_port> can be any unique port of your choice.
 
 The API file will be run automatically, and the service will listen to http requests on the chosen port.
+
+
+
+In case you are deploying your API without **docker swarm**, please skip the next section and directly proceed to *API endpoints section*.
+
+### Docker swarm
+
+Docker swarm can scale up the API into multiple replicas and can be used on one or multiple hosts(Linux users only). In both cases, a docker swarm setup is required for all hosts.
+
+#### Docker swarm setup
+
+1- Initialize Swarm:
+
+```sh 
+docker swarm init
+```
+
+2- On the manager host, open the cpu-inference.yaml file and specify the number of replicas needed. In case you are using multiple hosts (With multiple hosts section), the number of replicas will be divided across all hosts.
+
+```yaml
+version: "3"
+
+services:
+  api:
+    ports:
+      - "7770:7770"
+    image: yolov3_inference_api_cpu
+    volumes:
+      - "/mnt/models:/models"
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+```
+
+**Notes about cpu-inference.yaml:**
+
+* the volumes field on the left of ":" should be an absolute path, can be changeable by the user, and represents the models directory on your Operating System
+* the following volume's field ":/models" should never be changed
+
+#### With one host
+
+Deploy the API:
+
+```sh
+docker stack deploy -c cpu-inference.yaml yolov3-cpu
+```
+
+![onehost](./docs/yolocpu.png)
+
+#### With multiple hosts (Linux users only)
+
+1- **Make sure hosts are reachable on the same network**. 
+
+2- Choose a host to be the manager and run the following command on the chosen host to generate a token so the other hosts can join:
+
+```sh
+docker swarm join-token worker
+```
+
+A command will appear on your terminal, copy and paste it on the other hosts, as seen in the below image
+
+3- Deploy your application using:
+
+```sh 
+docker stack deploy -c cpu-inference.yaml yolov3-cpu
+```
+
+![multhost](./docs/yolocpu2.png)
+
+#### Useful Commands
+
+1- In order to scale up the service to 4 replicas for example use this command:
+
+```sh
+docker service scale yolov3-cpu_api=4
+```
+
+2- To check the available workers:
+
+```sh
+docker node ls
+```
+
+3- To check on which node the container is running:
+
+```sh
+docker service ps yolov3-cpu_api
+```
+
+4- To check the number of replicas:
+
+```sh
+docker service ls
+```
 
 ## API Endpoints
 
@@ -176,6 +310,8 @@ Inside each subfolder there should be a:
 
 ## Benchmarking
 
+### Docker
+
 <table>
     <thead align="center">
         <tr>
@@ -203,6 +339,27 @@ Inside each subfolder there should be a:
         </tr>
     </tbody>
 </table>
+
+### Docker swarm
+
+Here are two graphs showing time of prediction for different number of requests at the same time.
+
+
+![CPU 20 req](./docs/CPU20req.png)
+
+
+![CPU 40 req](./docs/CPU40req.png)
+
+
+We can see that both graphs got the same result no matter what is the number of received requests at the same time. When we increase the number of workers (hosts) we are able to speed up the inference by at least 2 times. For example we can see in the last column we were able to process 40 requests in:
+
+- 8 seconds with 20 replicas in 1 machine
+- 5.8 seconds with 20 replicas in each of the 2 machines
+- 3.9 seconds with 20 replicas in each of the 3 machines
+
+Moreover, in case one of the machines is down the others are always ready to receive requests.
+
+Finally since we are predicting on CPU scaling more replicas doesn't mean a faster prediction, 4 containers was faster than 20.
 
 ## Acknowledgment
 

@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  api:
+    ports: 
+      - "7770:7770"
+    image: yolov3_inference_api_cpu
+    volumes: 
+      - "/mnt/models:/models"
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
