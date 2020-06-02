@@ -102,16 +102,38 @@ class InferenceEngine(AbstractInferenceEngine):
 		output_bboxes = []
 		for i in remaining_indices:
 			box = boxes[i[0]]
+left = int(box[0])
+
+			right = int(box[0]) + int(box[2])
+
+			top = int(box[1])
+
+			bottom = int(box[1]) + int(box[3])
+
+
+
+
+			if (left < 0):
+				left = 0
+			if (right > height- 1):
+				right = width - 1
+			if (top < 0):
+				top = 0
+			if (bottom >height - 1):
+				bottom = height - 1
+
+
+
 			output_bboxes.append(
 				{
 					'ObjectClassName': self.labels[class_ids[i[0]]],
 					'ObjectClassId': class_ids[i[0]],
 					'confidence': confidences[i[0]],
 					'coordinates': {
-						'left': int(box[0]),
-						'right': int(box[0]) + int(box[2]),
-						'top': int(box[1]),
-						'bottom': int(box[1]) + int(box[3])
+						'left': left,
+						'right':right,
+						'top': top,
+						'bottom': bottom
 					}
 				}
 			)
