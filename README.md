@@ -1,10 +1,10 @@
-# YOLO v3 CPU Inference API for Windows and Linux
+# YOLO v4-v3 CPU Inference API for Windows and Linux
 
-This is a repository for an object detection inference API using the Yolov3 Opencv.
+This is a repository for an object detection inference API using the Yolov4 and Yolo v3  Opencv.
 
 The inference REST API works on CPU and doesn't require any GPU usage. It's supported on both Windows and Linux Operating systems.
 
-Models trained using our training Yolov3 repository can be deployed in this API. Several object detection models can be loaded and used at the same time.
+Models trained using our training Yolov4 or Yolov3  repository can be deployed in this API. Several object detection models can be loaded and used at the same time.
 
 ![predict image](./docs/4.gif)
 
@@ -44,13 +44,12 @@ To [install Docker on Windows](https://docs.docker.com/docker-for-windows/instal
 In order to build the project run the following command from the project's root directory:
 
 ```sh
-sudo docker build -t yolov3_inference_api_cpu -f ./docker/dockerfile .
+sudo docker build -t yolov4_inference_api_cpu -f ./docker/dockerfile .
 ```
 ### Behind a proxy
 
 ```sh
-sudo docker build --build-arg http_proxy='' --build-arg https_proxy='' -t yolov3_inference_api_cpu -f ./docker/dockerfile .
-
+sudo docker build --build-arg http_proxy='' --build-arg https_proxy='' -t yolov4_inference_api_cpu -f ./docker/dockerfile .
 ```
 
 ## Run The Docker Container
@@ -60,12 +59,12 @@ To run the API, go the to the API's directory and run the following:
 #### Using Linux based docker:
 
 ```sh
-sudo docker run -itv $(pwd)/models:/models -p <docker_host_port>:7770 yolov3_inference_api_cpu
+sudo docker run -itv $(pwd)/models:/models -p <docker_host_port>:7770 yolov4_inference_api_cpu
 ```
 #### Using Windows based docker:
 
 ```sh
-docker run -itv ${PWD}/models:/models -p <docker_host_port>:7770 yolov3_inference_api_cpu
+docker run -itv ${PWD}/models:/models -p <docker_host_port>:7770 yolov4_inference_api_cpu
 ```
 
 The <docker_host_port> can be any unique port of your choice.
@@ -150,7 +149,7 @@ Inside each subfolder there should be a:
 
   ```json
     {
-      "inference_engine_name": "yolov3_opencv_cpu_detection",
+      "inference_engine_name": "yolov4_opencv_cpu_detection",
       "confidence": 60,
       "nms_threshold": 0.6,
       "image": {
@@ -171,6 +170,9 @@ Inside each subfolder there should be a:
     }
   ```
   P.S
+  
+  - You can choose **"inference_engine_name"**: between **yolov4_opencv_cpu_detection** and **yolov3_opencv_cpu_detection** depending on the model you have.
+  
   - You can change confidence and nms_threshold values while running the API
   - The API will return bounding boxes with a confidence higher than the "confidence" value. A high "confidence" can show you only accurate predictions
 
