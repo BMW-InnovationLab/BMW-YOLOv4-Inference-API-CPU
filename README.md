@@ -212,3 +212,5 @@ Inside each subfolder there should be a:
 Antoine Charbel, inmind.ai , Beirut, Lebanon
 
 Daniel Anani, inmind.ai, Beirut, Lebanon
+
+Hadi Koubeissy, Beirut, Lebanon
