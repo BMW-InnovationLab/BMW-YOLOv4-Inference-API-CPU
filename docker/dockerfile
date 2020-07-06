@@ -30,7 +30,7 @@ RUN pip install -r requirements.txt
 
 WORKDIR ${HOME}
 RUN git clone http://github.com/opencv/opencv.git && cd opencv \
-    && git checkout master                   \
+    && git checkout 992c908b566d264b824680d0cf7d668cdf918254    \
     && mkdir build && cd build              \
     && cmake -D CMAKE_BUILD_TYPE=RELEASE    \
         -D CMAKE_INSTALL_PREFIX=/usr/local  \
