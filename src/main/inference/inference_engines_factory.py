@@ -27,7 +27,7 @@ class InferenceEngineFactory:
 			# import one of the available inference engine class (in this project there's only one), and return a
 			# model instance
 			if inference_engine_name=='yolov3_opencv_cpu_detection' or inference_engine_name=='yolov4_opencv_cpu_detection':
-				return getattr(__import__("yolov3_opencv_cpu_detection"), 'InferenceEngine')(path_to_model)
+				return getattr(__import__("yolo_opencv_cpu_detection"), 'InferenceEngine')(path_to_model)
 		except ApplicationError as e:
 			raise e
 		except Exception as e:

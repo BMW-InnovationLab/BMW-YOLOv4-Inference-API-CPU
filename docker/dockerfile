@@ -31,7 +31,7 @@ RUN pip install -r requirements.txt
 WORKDIR ${HOME}
 #Checkout version should be 4.4.0 when the new version is released 
 RUN git clone http://github.com/opencv/opencv.git && cd opencv \
-    && git checkout 992c908b566d264b824680d0cf7d668cdf918254    \
+    && git checkout 4.4.0    \
     && mkdir build && cd build              \
     && cmake -D CMAKE_BUILD_TYPE=RELEASE    \
         -D CMAKE_INSTALL_PREFIX=/usr/local  \

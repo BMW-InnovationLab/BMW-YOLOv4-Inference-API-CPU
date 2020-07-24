@@ -36,7 +36,7 @@ class InferenceEngine(AbstractInferenceEngine):
 		with open(os.path.join(self.model_path, 'obj.names'), 'r') as f:
 			self.labels = [line.strip() for line in f.readlines()]
 		self.net = cv2.dnn.readNet(os.path.join(self.model_path, 'yolo-obj.cfg'),
-								   os.path.join(self.model_path, 'yolo-obj.weights'))
+								   os.path.join(self.model_path, 'yolo-obj.weights'),'darknet')
 
 	async def infer(self, input_data, draw, predict_batch):
 		await asyncio.sleep(0.00001)
@@ -55,10 +55,10 @@ class InferenceEngine(AbstractInferenceEngine):
 		height, width, depth = np_image.shape
 		# create input blob
 		blob = cv2.dnn.blobFromImage(
-			np_image, self.scale, (self.image_width, self.image_height), (self.R_mean, self.G_mean, self.B_mean),
-			self.swapRB, self.crop)
+			np_image, size=(self.image_width, self.image_height), swapRB=self.swapRB, ddepth=cv2.CV_8U)
+
 		# feed the blob to the network
-		self.net.setInput(blob)
+		self.net.setInput(blob, scalefactor=self.scale, mean=[self.R_mean,self.G_mean,self.B_mean])
 		# get the output layers
 		output_layers = self.net.forward(self.__get_output_layers__())
 		# for each detection from each output layer
@@ -87,13 +87,7 @@ class InferenceEngine(AbstractInferenceEngine):
 		remaining_indices = cv2.dnn.NMSBoxes(
 			boxes, confidences, conf_threshold, nms_threshold)
 
-		for i in range(len(boxes)):
-			# i = i[0]
-			box = boxes[i]
-			x = box[0]
-			y = box[1]
-			w = box[2]
-			h = box[3]
+		
 
 		# release resources
 		cv2.destroyAllWindows()
@@ -115,7 +109,7 @@ class InferenceEngine(AbstractInferenceEngine):
 
 			if (left < 0):
 				left = 0
-			if (right > height- 1):
+			if (right > width- 1):
 				right = width - 1
 			if (top < 0):
 				top = 0
