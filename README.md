@@ -59,12 +59,12 @@ To run the API, go the to the API's directory and run the following:
 #### Using Linux based docker:
 
 ```sh
-sudo docker run -itv $(pwd)/models:/models -p <docker_host_port>:7770 yolov4_inference_api_cpu
+sudo docker run -itv $(pwd)/models:/models -v $(pwd):/models_hash:/models_hash -p <docker_host_port>:7770 yolov4_inference_api_cpu
 ```
 #### Using Windows based docker:
 
 ```sh
-docker run -itv ${PWD}/models:/models -p <docker_host_port>:7770 yolov4_inference_api_cpu
+docker run -itv ${PWD}/models:/models ${PWD}/models_hash:/models_hash -p <docker_host_port>:7770 yolov4_inference_api_cpu
 ```
 
 The <docker_host_port> can be any unique port of your choice.
