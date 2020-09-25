@@ -1,4 +1,4 @@
-# YOLO v3 CPU Inference API for Windows and Linux with docker swarm
+# YOLO v4-v3 CPU Inference API for Windows and Linux with docker swarm
 
 Please use **docker swarm** only if you need to:
 
