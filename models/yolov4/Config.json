@@ -1,0 +1,20 @@
+{
+  "inference_engine_name": "yolov4_opencv_cpu_detection",
+  "confidence": 60,
+  "nms_threshold": 0.6,
+  "image": {
+    "width": 416,
+    "height": 416,
+    "scale": 0.00392,
+    "swapRB": true,
+    "crop": false,
+    "mean": {
+      "R": 0,
+      "G": 0,
+      "B": 0
+    }
+  },
+  "framework": "yolo",
+  "type": "detection",
+  "network": "network_name"
+}
