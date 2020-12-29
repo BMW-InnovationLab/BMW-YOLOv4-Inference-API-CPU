@@ -15,10 +15,11 @@ sys.path.append('./inference')
 
 dl_service = DeepLearningService()
 error_logging = Error()
-app = FastAPI(version='1.0', title='BMW InnovationLab YOLOv3 opencv inference Automation',
-			  description="<b>API for performing YOLOv3 opencv inference</b></br></br>"
+app = FastAPI(version='1.0', title='BMW InnovationLab YOLOv4-v3 opencv inference Automation',
+			  description="<b>API for performing YOLOv4 and YOLOv3 opencv inference</b></br></br>"
 						  "<b>Contact the developers:</b></br>"
 						  "<b>Antoine Charbel: <a href='mailto:antoine.charbel@inmind.ai'>antoine.charbel@inmind.ai</a></b></br>"
+	      					  "<b>Hadi Koubeissy: <a href='mailto:123.hadikoubeissy@gmail.com'>123.hadikoubeissy@gmail.com</a></b></br>"
 						  "<b>BMW Innovation Lab: <a href='mailto:innovation-lab@bmw.de'>innovation-lab@bmw.de</a></b>")
 
 
@@ -40,10 +41,13 @@ def load_custom():
 	:return: All the available models with their respective hashed values
 	"""
 	try:
+		error_logging.info('request successful;')
 		return dl_service.load_all_models()
 	except ApplicationError as e:
+		error_logging.warning(str(e))
 		return ApiResponse(success=False, error=e)
-	except Exception:
+	except Exception as e:
+		error_logging.error(str(e))
 		return ApiResponse(success=False, error='unexpected server error')
 
 
@@ -76,7 +80,15 @@ def get_labels_custom(model: str = Form(...)):
 	:param model: Model name or model hash
 	:return: A list of the model's labels with their hashed values
 	"""
-	return dl_service.get_labels_custom(model)
+	try :
+		error_logging.info('request successful;')
+		return dl_service.get_labels_custom(model)
+	except ModelNotFound as e :		
+		error_logging.warning(model+' '+str(e))
+		return ApiResponse(success=False, error=e)
+	except Exception as e:
+		error_logging.error(model + ' ' + str(e))
+		return ApiResponse(success=False, error='unexpected server error')
 
 
 @app.get('/models/{model_name}/load')
@@ -89,9 +101,14 @@ async def load(model_name: str, force: bool = False):
 	"""
 	try:
 		dl_service.load_model(model_name, force)
+		error_logging.info('request successful;')
 		return ApiResponse(success=True)
 	except ApplicationError as e:
+		error_logging.warning(str(e))
 		return ApiResponse(success=False, error=e)
+	except Exception as e:
+		error_logging.error(str(e))
+		return ApiResponse(success=False, error='unexpected server error')
 
 
 @app.get('/models')
@@ -101,7 +118,12 @@ async def list_models(user_agent: str = Header(None)):
 	:param user_agent:
 	:return: APIResponse
 	"""
-	return ApiResponse(data={'models': dl_service.list_models()})
+	try :
+		error_logging.info('request successful;')
+		return ApiResponse(data={'models': dl_service.list_models()})
+	except Exception as e:
+		error_logging.error(str(e))
+		return ApiResponse(success=False, error='unexpected server error')
 
 
 @app.post('/models/{model_name}/predict')
@@ -140,7 +162,6 @@ async def run_model_batch(model_name: str, input_data: List[UploadFile] = File(.
 		error_logging.warning(model_name + ';' + str(e))
 		return ApiResponse(success=False, error=e)
 	except Exception as e:
-		print(e)
 		error_logging.error(model_name + ' ' + str(e))
 		return ApiResponse(success=False, error='unexpected server error')
 
@@ -172,9 +193,16 @@ async def list_model_labels(model_name: str):
 	:param model_name: Model name
 	:return: List of model's labels
 	"""
-	labels = dl_service.get_labels(model_name)
-	return ApiResponse(data=labels)
-
+	try :
+		labels = dl_service.get_labels(model_name)
+		error_logging.info('request successful;' + str(labels))
+		return ApiResponse(data=labels)
+	except ModelNotFound as e :
+		error_logging.warning(model_name + ';' + str(e))
+		return ApiResponse (success=False, error=e)
+	except Exception as e:
+		error_logging.error(model_name + ' ' + str(e))
+		return ApiResponse(success=False, error='unexpected server error')
 
 @app.get('/models/{model_name}/config')
 async def list_model_config(model_name: str):
@@ -183,5 +211,13 @@ async def list_model_config(model_name: str):
 	:param model_name: Model name
 	:return: List of model's configuration
 	"""
-	config = dl_service.get_config(model_name)
-	return ApiResponse(data=config)
+	try:
+		config = dl_service.get_config(model_name)
+		error_logging.info('request successful;' + str(config))
+		return ApiResponse(data=config)
+	except ModelNotFound as e :
+		error_logging.warning(model_name + ';' + str(e))
+		return ApiResponse(success=False, error=e)
+	except Exception as e:
+		error_logging.error(model_name + ' ' + str(e))
+		return ApiResponse(success=False, error='unexpected server error')

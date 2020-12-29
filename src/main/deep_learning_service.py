@@ -17,7 +17,7 @@ class DeepLearningService:
         # dictionary to hold the model instances (model_name: string -> model_instance: AbstractInferenceEngine)
         self.models_dict = {}
         # read from json file and append to dict
-        file_name = 'model_hash.json'
+        file_name = '/models_hash/model_hash.json'
         file_exists = os.path.exists(file_name)
         if file_exists:
             try:
@@ -26,7 +26,7 @@ class DeepLearningService:
             except:
                 self.models_hash_dict = {}
         else:
-            with open('model_hash.json', 'w'):
+            with open('/models_hash/model_hash.json', 'w'):
                 self.models_hash_dict = {}
         self.labels_hash_dict = {}
         self.base_models_dir = '/models'
@@ -62,7 +62,7 @@ class DeepLearningService:
             if key not in models:
                 del self.models_hash_dict[key]
         # append to json file
-        with open('model_hash.json', "w") as fp:
+        with open('/models_hash/model_hash.json', "w") as fp:
             json.dump(self.models_hash_dict, fp)
         return self.models_hash_dict
 
@@ -130,6 +130,8 @@ class DeepLearningService:
         :param model_name: Model name
         :return: List of model labels
         """
+        if model_name not in self.models_hash_dict and model_name not in self.models_hash_dict.values():
+            raise ModelNotFound
         if not self.model_loaded(model_name):
             self.load_model(model_name)
         return self.models_dict[model_name].labels
@@ -140,6 +142,8 @@ class DeepLearningService:
         :param model_name: Model name
         :return: A list of mode's labels with their hashed values
         """
+        if model_name not in self.models_hash_dict and model_name not in self.models_hash_dict.values():
+            raise ModelNotFound 
         if re.match(r'[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}', model_name,
                     flags=0):
             for key, value in self.models_hash_dict.items():
@@ -162,6 +166,8 @@ class DeepLearningService:
         :param model_name: Model name
         :return: List of model's configuration
         """
+        if model_name not in self.models_hash_dict and model_name not in self.models_hash_dict.values():
+            raise ModelNotFound 
         if not self.model_loaded(model_name):
             self.load_model(model_name)
         return self.models_dict[model_name].configuration
